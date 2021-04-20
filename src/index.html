@@ -71,9 +71,30 @@
               <button type="submit" class="btn btn-primary">Vote</button>
               <hr />
             </form>
+            </div>
+<div id="messageboard" style="display: none;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">message</th>
+                </tr>
+              </thead>
+              <tbody id="messageResults">
+              </tbody>
+            </table>
 
+            <form onSubmit="App.postMessage(); return false;">
+              <div class="form-group">
+                <label for="message_text">Enter Message:</label>
+                <input type="text" id="message_text"><br><br>
+              </div>
+              <button type="submit" class="btn btn-primary">Post</button>
+              <hr />
+            </form>
+</div>
             <p id="accountAddress" class="text-center"></p>
-          </div>
+
         </div>
       </div>
     </div>

@@ -10,14 +10,20 @@ contract Election {
         uint countRank3;
         uint countRank4;
     }
+    struct Message {
+      uint id;
+      string message_content;
+    }
 
     // Store accounts that have voted
     mapping(address => bool) public voters;
     // Store Candidates
     // Fetch Candidate
     mapping(uint => Candidate) public candidates;
+    mapping(uint => Message) public messages;
     // Store Candidates Count
     uint public candidatesCount;
+    uint public messageCount;
 
     event votedEvent (
         uint indexed _rank1
@@ -43,6 +49,12 @@ contract Election {
 
         emit votedEvent(_rank1);
     }
+
+    function createmessage (string memory _message) public {
+      messageCount++;
+      messages[messageCount] = Message(messageCount, _message);
+    }
+
     constructor () public {
         addCandidate("Candidate 1");
         addCandidate("Candidate 2");

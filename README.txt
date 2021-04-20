@@ -3,3 +3,5 @@ IN ORDER TO MAKE THIS WORK, YOU HAVE TO RUN THE FOLLOWING COMMANDS IN THIS SPECI
 truffle migrate --reset
 npm run dev
 truffle migrate --reset
+
+then keep hitting refresh. If that doesnt work, run truffle migrate --reset again
