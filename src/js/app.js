@@ -61,9 +61,6 @@ loader.show();
 vote_complete.hide();
 content.hide();
 
-// loader.hide();
-// content.show();
-
 // Load account data
 web3.eth.getCoinbase(function(err, account) {
   if (err === null) {

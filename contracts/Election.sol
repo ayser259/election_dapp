@@ -19,10 +19,9 @@ contract Election {
     // Store Candidates Count
     uint public candidatesCount;
 
-    // voted event
-    // event votedEvent (
-    //     uint indexed _candidateId
-    // );
+    event votedEvent (
+        uint indexed _rank1
+    );
 
     function addCandidate (string memory _name) private {
         candidatesCount ++;
@@ -42,10 +41,8 @@ contract Election {
         candidates[_rank3].countRank3 ++;
         candidates[_rank4].countRank4 ++;
 
-        // trigger voted event
-        // emit votedEvent(_rank1);
+        emit votedEvent(_rank1);
     }
-
     constructor () public {
         addCandidate("Candidate 1");
         addCandidate("Candidate 2");
