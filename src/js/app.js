@@ -54,9 +54,11 @@ App = {
 render: function() {
 var electionInstance;
 var loader = $("#loader");
+var vote_complete = $("#vote_complete");
 var content = $("#content");
 
 loader.show();
+vote_complete.hide();
 content.hide();
 
 // loader.hide();
@@ -120,6 +122,10 @@ App.contracts.Election.deployed().then(function(instance) {
   // Do not allow a user to vote
   if(hasVoted) {
     $('form').hide();
+    $('vote_complete').show();
+    vote_complete.show();
+  }else{
+    vote_complete.hide();
   }
   loader.hide();
   content.show();
