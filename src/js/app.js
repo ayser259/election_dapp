@@ -65,9 +65,26 @@ App = {
       web3.eth.getCoinbase(function(err, account) {
         if (err === null) {
           App.account = account;
+          globalThis.globalAccount = account;
           $("#accountAddress").html("Your Account: " + account);
         }
       });
+
+      // Load contract address
+      App.contracts.Election.deployed().then(function(instance) {
+        electionInstance = instance
+        $("contractAddress").html("Please Deposit ETH to: " + electionInstance.address);
+      });
+
+      // Load balance data
+      App.contracts.Election.deployed().then(function(instance) {
+        electionInstance = instance;
+        account = globalAccount
+        return electionInstance.stake(account);
+      }).then(function(stake) {
+        $("#accountBalance").html("Your Balance: " + stake/1e18 + " ETH");
+      });
+
       App.contracts.Election.deployed().then(function(instance) {
           electionInstance = instance;
           return electionInstance.messageCount();
@@ -116,13 +133,21 @@ App = {
               var rank4 = $('#rank4');
               rank4.empty();
 
+              var tot_rank = values,
+                  result = tot_rank.reduce(function (r, a) {
+                      a.forEach(function (b, i) {
+                          r[i] = (r[i] || 0) + b;
+                      });
+                      return r;
+                  }, []);
+
               for (var i = 0; i < candidatesCount; i++) {
                 var id = values[i][0];
                 var name = values[i][1];
-                var countRank1 = values[i][2];
-                var countRank2 = values[i][3];
-                var countRank3 = values[i][4];
-                var countRank4 = values[i][5];
+                var countRank1 = values[i][2] / tot_rank;
+                var countRank2 = values[i][3] / tot_rank[i];
+                var countRank3 = values[i][4] / tot_rank[i];
+                var countRank4 = values[i][5] / tot_rank[i];
 
                 // Render candidate Result
                 var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + countRank1 + "</td><td>" + countRank2 + "</td><td>" + countRank3 + "</td><td>" + countRank4 + "</td></tr>"
