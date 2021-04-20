@@ -23,6 +23,8 @@
         <div class="col-lg-12">
           <h1 class="text-center">Election Results</h1>
           <hr/>
+          <p id="contractAddress" class="text-center"></p>
+          <hr/>
           <br/>
           <div id="loader">
             <p class="text-center">Loading...</p>
@@ -46,7 +48,6 @@
               </tbody>
             </table>
             <hr/>
-
             <form onSubmit="App.castVote(); return false;">
               <div class="form-group">
                 <label for="rank1">Select First Choice</label>
@@ -72,7 +73,7 @@
               <hr />
             </form>
             </div>
-<div id="messageboard" style="display: none;">
+            <div id="messageboard" style="display: none;">
             <table class="table">
               <thead>
                 <tr>
@@ -83,7 +84,6 @@
               <tbody id="messageResults">
               </tbody>
             </table>
-
             <form onSubmit="App.postMessage(); return false;">
               <div class="form-group">
                 <label for="message_text">Enter Message:</label>
@@ -92,13 +92,12 @@
               <button type="submit" class="btn btn-primary">Post</button>
               <hr />
             </form>
-</div>
+            </div>
             <p id="accountAddress" class="text-center"></p>
-
+            <p id="accountBalance" class="text-center"></p>
         </div>
       </div>
     </div>
-
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
