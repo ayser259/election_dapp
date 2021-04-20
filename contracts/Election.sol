@@ -1,64 +1,70 @@
 pragma solidity ^0.5.0;
 
 contract Election {
-    // Model a Candidate
-    struct Candidate {
-        uint id;
-        string name;
-        uint countRank1;
-        uint countRank2;
-        uint countRank3;
-        uint countRank4;
-    }
-    struct Message {
-      uint id;
-      string message_content;
-    }
+	struct Candidate {
+		uint id;
+		string name;
+		uint countRank1;
+		uint countRank2;
+		uint countRank3;
+		uint countRank4;
+	}
 
-    // Store accounts that have voted
-    mapping(address => bool) public voters;
-    // Store Candidates
-    // Fetch Candidate
-    mapping(uint => Candidate) public candidates;
-    mapping(uint => Message) public messages;
-    // Store Candidates Count
-    uint public candidatesCount;
-    uint public messageCount;
+	struct Message {
+		uint id;
+		string message_content;
+	}
 
-    event votedEvent (
-        uint indexed _rank1
-    );
+	mapping(address => bool) public voters;
+	mapping(uint => Candidate) public candidates;
+	mapping(uint => Message) public messages;
+	mapping(address => uint) public stake;
+	uint public candidatesCount;
+	uint public messageCount;
 
-    function addCandidate (string memory _name) private {
-        candidatesCount ++;
-        candidates[candidatesCount] = Candidate(candidatesCount, _name,0,0,0,0);
-    }
+	event votedEvent (
+		uint indexed _rank1
+	);
 
-    function vote (uint _rank1,uint _rank2,uint _rank3,uint _rank4) public {
-        // require that they haven't voted before
-        require(!voters[msg.sender]);
+	constructor() public {
+	addCandidate("Candidate 1");
+	addCandidate("Candidate 2");
+	addCandidate("Candidate 3");
+	addCandidate("Candidate 4");
+	}
 
-        // record that voter has voted
-        voters[msg.sender] = true;
+	function addCandidate (string memory _name) private {
+		candidatesCount ++;
+		candidates[candidatesCount] = Candidate(candidatesCount, _name, 0 ,0 ,0 ,0);
+	}
 
-        // update candidate vote Count
-        candidates[_rank1].countRank1 ++;
-        candidates[_rank2].countRank2 ++;
-        candidates[_rank3].countRank3 ++;
-        candidates[_rank4].countRank4 ++;
+	function () external payable {
+		deposit(); // Fallback function, accepts deposits
+	}
 
-        emit votedEvent(_rank1);
-    }
+	function deposit () public payable {
+		stake[msg.sender] += msg.value;
+	}
+
+	function vote (uint _rank1, uint _rank2, uint _rank3, uint _rank4) public {
+		require(!voters[msg.sender]); // Haven't voted before
+		require(stake[msg.sender] > 0); // Have deposited ETH 
+		require((_rank1 != _rank2) && (_rank1 != _rank3) && (_rank1 != _rank4) && (_rank2 != _rank3) && (_rank3 != _rank4));
+		voters[msg.sender] = true;
+
+		candidates[_rank1].countRank1 += (stake[msg.sender]/1e18); 
+		candidates[_rank2].countRank2 += (stake[msg.sender]/1e18);
+		candidates[_rank3].countRank3 += (stake[msg.sender]/1e18);
+		candidates[_rank4].countRank4 += (stake[msg.sender]/1e18);
+
+		stake[msg.sender] = 0;
+
+		emit votedEvent(_rank1);
+	}
 
     function createmessage (string memory _message) public {
       messageCount++;
       messages[messageCount] = Message(messageCount, _message);
     }
 
-    constructor () public {
-        addCandidate("Candidate 1");
-        addCandidate("Candidate 2");
-        addCandidate("Candidate 3");
-        addCandidate("Candidate 4");
-    }
 }
